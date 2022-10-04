@@ -1,12 +1,18 @@
 import { useSelector, useDispatch } from 'react-redux';
-import { clearCompleted } from '../redux/todoSlicer/todoSlicer';
+import { changeActiveFilter, clearCompleted } from '../redux/todoSlicer/todoSlicer';
 
 const Footer = () => {
-  const itemsLength = useSelector((state) => state.todo.todoItems.filter((el) => el.isChecked === false));
   const dispatch = useDispatch();
+  const itemsLength = useSelector((state) => state.todo.todoItems.filter((el) => el.isChecked === false));
+
+  const activeFilter = useSelector((state) => state.todo.activeFilter);
 
   const handleClear = () => {
     dispatch(clearCompleted());
+  };
+
+  const handleChangeFilter = (newFilter) => {
+    dispatch(changeActiveFilter(newFilter));
   };
 
   return (
@@ -16,11 +22,32 @@ const Footer = () => {
       </span>
 
       <div className="space-x-4">
-        <span className="text-md font-normal text-neutral-500 rounded tracking-wider border px-3 py-1.5 cursor-pointer hover:border-primary-500 hover:text-primary-500">
+        <span
+          onClick={() => handleChangeFilter('all')}
+          className={`text-md font-normal text-neutral-500 rounded tracking-wider border px-3 py-1.5 cursor-pointer ${
+            activeFilter === 'all' ? 'bg-primary-500 text-white' : 'hover:border-primary-500 hover:text-primary-500'
+          }`}
+        >
           All
         </span>
 
-        <span className="text-md font-normal text-neutral-500 rounded tracking-wider border px-3 py-1.5 cursor-pointer hover:border-primary-500 hover:text-primary-500">
+        <span
+          onClick={() => handleChangeFilter('active')}
+          className={`text-md font-normal text-neutral-500 rounded tracking-wider border px-3 py-1.5 cursor-pointer ${
+            activeFilter === 'active' ? 'bg-primary-500 text-white' : 'hover:border-primary-500 hover:text-primary-500'
+          }`}
+        >
+          Active
+        </span>
+
+        <span
+          onClick={() => handleChangeFilter('completed')}
+          className={`text-md font-normal text-neutral-500 rounded tracking-wider border px-3 py-1.5 cursor-pointer ${
+            activeFilter === 'completed'
+              ? 'bg-primary-500 text-white'
+              : 'hover:border-primary-500 hover:text-primary-500'
+          }`}
+        >
           Completed
         </span>
       </div>

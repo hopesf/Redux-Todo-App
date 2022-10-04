@@ -17,6 +17,7 @@ const AddTodo = () => {
       const check = todoItems.filter((el) => el.title === newTodoName);
       if (check.length < 1) {
         dispatch(addTodo(newTodoName));
+        setNewTodoName('');
       }
     }
   };
@@ -28,6 +29,7 @@ const AddTodo = () => {
         maxLength={30}
         onChange={handleInput}
         onKeyPress={handleEnterPress}
+        value={newTodoName}
         className="w-full outline-none p-5 text-lg rounded text-primary-500"
         placeholder="Type New Todo"
       />

@@ -3,18 +3,19 @@ import { createSlice } from '@reduxjs/toolkit';
 const initialState = {
   todoItems: [
     {
-      title: 'işe git',
+      title: 'Wake up and go to work',
       isChecked: true,
     },
     {
-      title: 'yemek ye',
+      title: 'Lets eat some food',
       isChecked: true,
     },
     {
-      title: 'oyun oyna',
+      title: 'Go home and play game',
       isChecked: false,
     },
   ],
+  activeFilter: 'all',
 };
 
 const reducers = {
@@ -29,6 +30,12 @@ const reducers = {
   clearCompleted: (state) => {
     state.todoItems = state.todoItems.filter((el) => el.isChecked === false);
   },
+  removeItem: (state, { payload }) => {
+    state.todoItems = state.todoItems.filter((el) => el.title !== payload.title);
+  },
+  changeActiveFilter: (state, { payload }) => {
+    state.activeFilter = payload;
+  },
 };
 
 const todoSlicer = createSlice({
@@ -37,5 +44,5 @@ const todoSlicer = createSlice({
   reducers,
 });
 
-export const { addTodo, changeChecked, clearCompleted } = todoSlicer.actions;
+export const { addTodo, changeChecked, clearCompleted, removeItem, changeActiveFilter } = todoSlicer.actions;
 export default todoSlicer.reducer;
