@@ -1,24 +1,26 @@
 import { useState } from 'react';
-import { useSelector } from 'react-redux';
-import { useDispatch } from 'react-redux';
-import { addTodo } from '../redux/todoSlicer/todoSlicer';
+import { useDispatch, useSelector } from 'react-redux';
+import { addTodo, todoItemsSelector } from '../redux/todoSlicer/todoSlicer';
 
 const AddTodo = () => {
   const [newTodoName, setNewTodoName] = useState('');
-  const todoItems = useSelector((state) => state.todo.todoItems);
+  const todoItems = useSelector(todoItemsSelector);
   const dispatch = useDispatch();
 
-  const handleInput = (e) => {
-    setNewTodoName(e.target.value.trim());
+  const handleInput = ({ target }) => {
+    setNewTodoName(target.value.trim());
   };
 
-  const handleEnterPress = (e) => {
-    if (e.charCode === 13 && newTodoName.length > 0) {
-      const check = todoItems.filter((el) => el.title === newTodoName);
-      if (check.length < 1) {
-        dispatch(addTodo(newTodoName));
-        setNewTodoName('');
-      }
+  const CheckExist = () => {
+    const filter = todoItems.filter((el) => el.title === newTodoName);
+    return filter.length < 1 ? true : false;
+  };
+
+  const handleEnterPress = ({ charCode }) => {
+    if (charCode === 13 && newTodoName.length > 0) {
+      const result = CheckExist();
+      result ? dispatch(addTodo(newTodoName)) : NaN;
+      setNewTodoName('');
     }
   };
 

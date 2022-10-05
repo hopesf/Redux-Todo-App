@@ -11,7 +11,7 @@ const initialState = {
       isChecked: true,
     },
     {
-      title: 'Go home and play game',
+      title: 'Go home and sleep well',
       isChecked: false,
     },
   ],
@@ -24,7 +24,7 @@ const reducers = {
   },
   changeChecked: (state, { payload }) => {
     state.todoItems = state.todoItems.map((el) =>
-      el.title === payload.title ? { ...el, isChecked: payload.isChecked } : el
+      el.title === payload.title ? { ...el, isChecked: !payload.isChecked } : el
     );
   },
   clearCompleted: (state) => {
@@ -43,6 +43,19 @@ const todoSlicer = createSlice({
   initialState,
   reducers,
 });
+
+export const todoItemsSelector = (state) => state.todo.todoItems;
+export const activeFilterSelector = (state) => state.todo.activeFilter;
+
+export const filteredSelector = (state) => {
+  if (state.todo.activeFilter === 'all') {
+    return state.todo.todoItems;
+  }
+
+  return state.todo.todoItems.filter((todd) =>
+    state.todo.activeFilter === 'active' ? todd.isChecked == false : todd.isChecked == true
+  );
+};
 
 export const { addTodo, changeChecked, clearCompleted, removeItem, changeActiveFilter } = todoSlicer.actions;
 export default todoSlicer.reducer;

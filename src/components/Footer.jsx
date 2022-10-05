@@ -1,11 +1,15 @@
 import { useSelector, useDispatch } from 'react-redux';
-import { changeActiveFilter, clearCompleted } from '../redux/todoSlicer/todoSlicer';
+import {
+  activeFilterSelector,
+  changeActiveFilter,
+  clearCompleted,
+  todoItemsSelector,
+} from '../redux/todoSlicer/todoSlicer';
 
 const Footer = () => {
+  const itemsLength = useSelector(todoItemsSelector).filter((el) => el.isChecked === false);
+  const activeFilter = useSelector(activeFilterSelector);
   const dispatch = useDispatch();
-  const itemsLength = useSelector((state) => state.todo.todoItems.filter((el) => el.isChecked === false));
-
-  const activeFilter = useSelector((state) => state.todo.activeFilter);
 
   const handleClear = () => {
     dispatch(clearCompleted());

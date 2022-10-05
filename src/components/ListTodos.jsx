@@ -1,30 +1,18 @@
 import { useSelector, useDispatch } from 'react-redux';
-import { changeChecked, removeItem } from '../redux/todoSlicer/todoSlicer';
+import { changeChecked, filteredSelector, removeItem } from '../redux/todoSlicer/todoSlicer';
 import CloseIcon from './CloseIcon';
 
-let filtered = [];
 const ListTodos = () => {
   const dispatch = useDispatch();
-  const todoList = useSelector((state) => state.todo.todoItems);
+  const filtered = useSelector(filteredSelector);
 
-  const activeFilter = useSelector((state) => state.todo.activeFilter);
-
-  const handleRadioButton = (el) => {
-    let hazirla = { title: el.title, isChecked: !el.isChecked };
-    dispatch(changeChecked(hazirla));
+  const handleRadioButton = ({ title, isChecked }) => {
+    dispatch(changeChecked({ title, isChecked }));
   };
 
   const handleRemove = (el) => {
     dispatch(removeItem(el));
   };
-
-  filtered = todoList;
-
-  if (activeFilter !== 'all') {
-    filtered = todoList.filter((todo) =>
-      activeFilter === 'active' ? todo.isChecked == false : todo.isChecked == true
-    );
-  }
 
   return (
     <div className="flex flex-col w-full h-[500px] scrollbar-hide overflow-y-auto">
