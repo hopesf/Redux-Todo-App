@@ -1,18 +1,23 @@
+import { useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { changeChecked, filteredSelector, removeItem } from '../redux/todoSlicer/todoSlicer';
+import { changeCheckedTodo, deleteTodo, getTodos } from '../redux/todoSlicer/todoApiCalls';
+import { filteredSelector } from '../redux/todoSlicer/todoSelectors';
 import CloseIcon from './CloseIcon';
 
 const ListTodos = () => {
   const dispatch = useDispatch();
   const filtered = useSelector(filteredSelector);
+  const { isLoading, error } = useSelector((state) => state.todo);
 
-  const handleRadioButton = ({ title, isChecked }) => {
-    dispatch(changeChecked({ title, isChecked }));
-  };
+  const handleRadioButton = ({ id }) => dispatch(changeCheckedTodo(id));
+  const handleRemove = (el) => dispatch(deleteTodo(el.id));
 
-  const handleRemove = (el) => {
-    dispatch(removeItem(el));
-  };
+  useEffect(() => {
+    dispatch(getTodos());
+  }, []);
+
+  if (isLoading) return <div>Loading...</div>;
+  if (error) return <div>{error}</div>;
 
   return (
     <div className="flex flex-col w-full h-[500px] scrollbar-hide overflow-y-auto">

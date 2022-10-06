@@ -1,23 +1,20 @@
+import { useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import {
-  activeFilterSelector,
-  changeActiveFilter,
-  clearCompleted,
-  todoItemsSelector,
-} from '../redux/todoSlicer/todoSlicer';
+import { clearCompletedItems } from '../redux/todoSlicer/todoApiCalls';
+import { activeFilterSelector, todoItemsSelector } from '../redux/todoSlicer/todoSelectors';
+import { changeActiveFilter } from '../redux/todoSlicer/todoSlicer';
 
 const Footer = () => {
   const itemsLength = useSelector(todoItemsSelector).filter((el) => el.isChecked === false);
   const activeFilter = useSelector(activeFilterSelector);
   const dispatch = useDispatch();
 
-  const handleClear = () => {
-    dispatch(clearCompleted());
-  };
+  const handleClear = () => dispatch(clearCompletedItems());
+  const handleChangeFilter = (newFilter) => dispatch(changeActiveFilter(newFilter));
 
-  const handleChangeFilter = (newFilter) => {
-    dispatch(changeActiveFilter(newFilter));
-  };
+  useEffect(() => {
+    localStorage.setItem('activeFilter', activeFilter);
+  }, [activeFilter]);
 
   return (
     <div className="flex w-full justify-between py-4 items-center px-3 border-t border-neutral-300">
